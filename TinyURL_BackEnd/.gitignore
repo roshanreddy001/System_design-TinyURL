@@ -1,0 +1,25 @@
+```gitignore
+# Maven build output
+target/
+
+# Logs
+*.log
+logs/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local application configuration containing credentials
+application-local.properties
+application-local.yml
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+```
