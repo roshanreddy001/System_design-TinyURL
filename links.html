@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Roshan TinyURL — Manage, edit, and track all your shortened links in one place."/>
+  <title>My Links — Roshan TinyURL</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stats-strip .mini-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .stats-strip .mini-stat-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(124,58,237,0.1);
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .stats-strip .mini-stat-val { font-size: 24px; font-weight: 800; color: var(--text-primary); }
+    .stats-strip .mini-stat-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+    @media (max-width: 640px) { .stats-strip { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">Roshan TinyURL</span>
+        <span class="logo-sub">Link Shortener</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+      <a href="index.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a href="links.html" class="nav-item active">
+        <span class="nav-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></span>
+        <span class="nav-label">My Links</span>
+      </a>
+      <a href="analytics.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></span>
+        <span class="nav-label">Analytics</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <span class="nav-label">Settings</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar">R</div>
+        <div class="user-info">
+          <div class="user-name">Roshan</div>
+          <div class="user-handle">@roshan.dev</div>
+        </div>
+      </div>
+      <div class="sidebar-tagline">Short Links · Big Possibilities 🚀</div>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <main class="main-content">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="topbar-search">
+          <svg class="search-icon" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="search" placeholder="Search links, analytics..." aria-label="Search"/>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" aria-label="Notifications">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <span class="notif-badge"></span>
+        </button>
+        <button class="topbar-user">
+          <div class="avatar">R</div>
+          <span class="uname">Roshan</span>
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="page-content fade-in">
+      <!-- Header -->
+      <div class="page-header">
+        <div class="page-title-area">
+          <h1 class="page-title">My Links</h1>
+          <p class="page-subtitle">Manage, edit, and track all your shortened links.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="page-title-brand">Roshan 👑</div>
+          <button class="btn btn-primary" id="createLinkBtn">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            Create New Link
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Strip -->
+      <div class="stats-strip">
+        <div class="mini-stat">
+          <div class="mini-stat-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></div>
+          <div><div class="mini-stat-val" id="statTotal">—</div><div class="mini-stat-label">Total Links</div></div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-icon" style="background:rgba(59,130,246,0.1);color:var(--secondary)"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></div>
+          <div><div class="mini-stat-val" id="statClicks">—</div><div class="mini-stat-label">Total Clicks</div></div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-icon" style="background:rgba(16,185,129,0.1);color:var(--success)"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <div><div class="mini-stat-val" id="statActive">—</div><div class="mini-stat-label">Active</div></div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <div class="filter-search">
+          <svg class="fs-icon" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="search" id="searchInput" placeholder="Search by original URL, short code, or title..." aria-label="Search links"/>
+        </div>
+        <select class="filter-select" id="dateFilter" aria-label="Filter by date">
+          <option value="">All Time</option>
+          <option value="today">Today</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+        </select>
+        <select class="filter-select" id="statusFilter" aria-label="Filter by status">
+          <option value="">All Links</option>
+          <option value="active">Active</option>
+          <option value="expired">Expired</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="card" style="padding:0">
+        <div class="table-wrapper">
+          <table id="linksTable" aria-label="Links table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Original URL</th>
+                <th>Short URL</th>
+                <th>Clicks</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="linksTableBody"></tbody>
+          </table>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="empty-state" style="display:none">
+          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <h3>No links found</h3>
+          <p>Try adjusting your search or filter criteria.</p>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap;gap:8px">
+        <span id="pageInfo" style="font-size:12.5px;color:var(--text-muted)"></span>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Create Link Modal -->
+<div class="modal-overlay" id="createModal" role="dialog" aria-modal="true" aria-labelledby="createModalTitle">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="createModalTitle">Create New Link</h2>
+      <button class="modal-close" aria-label="Close">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="createLinkForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="newOriginalUrl">Original URL *</label>
+        <input type="url" id="newOriginalUrl" class="form-input" placeholder="https://example.com/very/long/url" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="newTitle">Link Title</label>
+        <input type="text" id="newTitle" class="form-input" placeholder="My awesome link"/>
+      </div>
+      <div class="adv-grid">
+        <div class="form-group">
+          <label class="form-label" for="newAlias">Custom Alias</label>
+          <div class="input-group">
+            <span class="input-prefix">tinyurl.com/</span>
+            <input type="text" id="newAlias" placeholder="my-link" maxlength="30"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newExpires">Expiry Date</label>
+          <input type="date" id="newExpires" class="form-input"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('createModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Link</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Link Modal -->
+<div class="modal-overlay" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="editModalTitle">Edit Link</h2>
+      <button class="modal-close" aria-label="Close">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="editLinkForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="editOriginalUrl">Original URL</label>
+        <input type="url" id="editOriginalUrl" class="form-input" readonly style="background:var(--bg-input);cursor:not-allowed;opacity:0.7"/>
+        <span style="font-size:11.5px;color:var(--text-muted)">Original URL cannot be changed after creation.</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="editTitle">Link Title</label>
+        <input type="text" id="editTitle" class="form-input" placeholder="My link title"/>
+      </div>
+      <div class="adv-grid">
+        <div class="form-group">
+          <label class="form-label" for="editAlias">Short Code</label>
+          <div class="input-group">
+            <span class="input-prefix">tinyurl.com/</span>
+            <input type="text" id="editAlias" placeholder="my-link" maxlength="30"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="editExpires">Expiry Date</label>
+          <input type="date" id="editExpires" class="form-input"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+<script src="js/links.js"></script>
+</body>
+</html>

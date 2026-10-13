@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Roshan TinyURL — Shorten long URLs instantly. Create trackable, shareable short links with one click." />
+  <title>Dashboard — Roshan TinyURL</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Dashboard-specific additions */
+    .recent-link-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border-light);
+      transition: background 0.15s;
+      border-radius: var(--radius-sm);
+    }
+
+    .recent-link-row:last-child {
+      border-bottom: none;
+    }
+
+    .recent-link-row:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .rl-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .rl-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .rl-original {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .rl-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+    }
+
+    .rl-short {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .rl-short:hover {
+      text-decoration: underline;
+    }
+
+    .rl-clicks {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* QR preview inline */
+    .qr-inline {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--bg-input);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    .qr-inline img {
+      width: 72px;
+      height: 72px;
+      border-radius: 8px;
+    }
+
+    /* Dashboard stats mini-cards */
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .mini-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .mini-stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .mini-stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-top: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">Roshan TinyURL</span>
+          <span class="logo-sub">Link Shortener</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+        <a href="index.html" class="nav-item active" id="nav-dashboard">
+          <span class="nav-icon">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+          </span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="links.html" class="nav-item" id="nav-links">
+          <span class="nav-icon">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </span>
+          <span class="nav-label">My Links</span>
+        </a>
+        <a href="analytics.html" class="nav-item" id="nav-analytics">
+          <span class="nav-icon">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </span>
+          <span class="nav-label">Analytics</span>
+        </a>
+        <a href="settings.html" class="nav-item" id="nav-settings">
+          <span class="nav-icon">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </span>
+          <span class="nav-label">Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="user-avatar">R</div>
+          <div class="user-info">
+            <div class="user-name">Roshan</div>
+            <div class="user-handle">@roshan.dev</div>
+          </div>
+        </div>
+        <div class="sidebar-tagline">Short Links · Big Possibilities 🚀</div>
+      </div>
+    </aside>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div class="topbar-search">
+            <svg class="search-icon" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="search" placeholder="Search links, analytics..." aria-label="Search" id="topbarSearch" />
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-icon-btn" aria-label="Notifications" data-tooltip="Notifications">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <span class="notif-badge"></span>
+          </button>
+          <button class="topbar-user" aria-label="User menu">
+            <div class="avatar">R</div>
+            <span class="uname">Roshan</span>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content fade-in">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="page-title-area">
+            <h1 class="page-title">Shorten Your Long <span>URL</span></h1>
+            <p class="page-subtitle">Turn long links into short, shareable and trackable links.</p>
+          </div>
+          <div class="page-title-brand">
+            Roshan
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="url(#grad1)" stroke-width="2">
+              <defs>
+                <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#7c3aed" />
+                  <stop offset="100%" stop-color="#3b82f6" />
+                </linearGradient>
+              </defs>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 3l14 9-14 9V3z" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- URL Shortener Hero Card -->
+        <div class="url-shortener-hero">
+          <div class="hero-brand"></div>
+          <form id="shortenForm" novalidate>
+            <div class="url-input-row">
+              <label for="urlInput" style="display:none">Long URL</label>
+              <div class="url-input-wrap">
+                <svg class="url-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+                <input type="url" id="urlInput"
+                  placeholder="https://www.example.com/very/long/url/that/you/want/to/shorten" autocomplete="url"
+                  spellcheck="false" />
+              </div>
+              <button type="submit" class="btn btn-primary" id="shortenBtn"
+                style="white-space:nowrap;padding:14px 24px">
+                Shorten URL
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Error Message -->
+            <div id="urlError" class="form-error" style="display:none;margin-top:8px">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+              </svg>
+              <span></span>
+            </div>
+
+            <!-- Advanced Options -->
+            <div class="adv-toggle" id="advToggle" role="button" aria-expanded="false" tabindex="0">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+              Advanced Options (Optional)
+              <svg class="adv-arrow" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+
+            <div class="adv-body" id="advBody">
+              <div class="adv-grid">
+                <div class="form-group">
+                  <label class="form-label" for="customAlias">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                    Custom Alias (Optional)
+                  </label>
+                  <div class="input-group">
+                    <span class="input-prefix">tinyurl.com/</span>
+                    <input type="text" id="customAlias" placeholder="my-link" maxlength="30" pattern="[a-zA-Z0-9-_]+" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="expiresAt">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Expiration Date
+                  </label>
+                  <input type="date" id="expiresAt" class="form-input" />
+                </div>
+                <div class="form-group" style="grid-column:1/-1">
+                  <label class="form-label" for="linkTitle">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Link Title
+                  </label>
+                  <input type="text" id="linkTitle" class="form-input"
+                    placeholder="Give your link a memorable name..." />
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- Result Panel -->
+          <div class="result-panel" id="resultPanel">
+            <div class="result-success-banner">
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <div class="rs-title">URL Shortened Successfully!</div>
+                <div class="rs-sub">Your short link is ready to share.</div>
+              </div>
+              <div
+                style="margin-left:auto;font-family:'Plus Jakarta Sans',sans-serif;font-style:italic;font-weight:800;font-size:22px;color:rgba(255,255,255,0.3)">
+                Roshan 👑</div>
+            </div>
+            <div class="result-body">
+              <div class="result-original-label">Short URL</div>
+              <div class="result-short-url">
+                <span class="short-url-display" id="shortUrlDisplay"></span>
+                <button class="btn btn-primary btn-sm" id="copyShortUrl">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  Copy
+                </button>
+                <button class="btn btn-secondary btn-sm" id="qrBtn">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                  </svg>
+                  QR Code
+                </button>
+              </div>
+              <div class="result-original-label">Original URL</div>
+              <div class="result-original-url" id="originalUrlDisplay"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mini Stats Row -->
+        <div class="mini-stats">
+          <div class="mini-stat">
+            <div class="mini-stat-val" id="dashTotalLinks">—</div>
+            <div class="mini-stat-label">Total Links</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-val" id="dashTotalClicks">—</div>
+            <div class="mini-stat-label">Total Clicks</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-val" id="dashActiveLinks">—</div>
+            <div class="mini-stat-label">Active Links</div>
+          </div>
+        </div>
+
+        <!-- Recent Links -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                style="color:var(--primary)">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              Recent Links
+            </h2>
+            <a href="links.html" class="btn btn-secondary btn-sm">View All</a>
+          </div>
+          <div id="recentLinks">
+            <div class="loading-overlay">
+              <div class="spinner spinner-dark"></div>
+              <span>Loading links...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    // Load mini stats for dashboard
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        let links;
+        try { const res = await UrlsAPI.getAll(); links = res.content || res; }
+        catch { links = MockData.links; }
+        document.getElementById('dashTotalLinks').textContent = links.length;
+        document.getElementById('dashTotalClicks').textContent = formatNumber(links.reduce((s, l) => s + (l.clicks || 0), 0));
+        document.getElementById('dashActiveLinks').textContent = links.filter(l => !l.status || l.status === 'active').length;
+      } catch { }
+    });
+  </script>
+</body>
+
+</html>
